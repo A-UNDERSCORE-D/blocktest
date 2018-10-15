@@ -98,16 +98,7 @@ object BlockShape : Block(Material.ROCK), ITileEntityProvider {
         val startZ = pos.z - size
         val endX = pos.x + size
         val endZ = pos.z + size
-
-        for (x in startX..endX) {
-            for (z in startZ..endZ) {
-                val toPlacePos = BlockPos(x, pos.y, z)
-                if (toPlacePos == pos) {
-                    continue
-                }
-                worldIn.setBlockState(toPlacePos, toPlace)
-            }
-        }
+        placeBlocksInArea(worldIn, BlockPos(startX, pos.y, startZ), BlockPos(endX, pos.y, endZ), toPlace, arrayOf(pos))
     }
 
     private fun placeWall(size: Int, worldIn: World, pos: BlockPos, facing: EnumFacing, toPlace: IBlockState) {
@@ -135,18 +126,22 @@ object BlockShape : Block(Material.ROCK), ITileEntityProvider {
         val pointSE = BlockPos(endX, pos.y, endZ)
         val pointNE = BlockPos(startX, pos.y, endZ)
         val pointSW = BlockPos(endX, pos.y, startZ)
-        placeBlocksInArea(worldIn, pointNW, pointSW, toPlace)
-        placeBlocksInArea(worldIn, pointSW, pointSE, toPlace)
-        placeBlocksInArea(worldIn, pointSE, pointNE, toPlace)
-        placeBlocksInArea(worldIn, pointNE, pointNW, toPlace)
+        placeBlocksInArea(worldIn, pointNW, pointSW, toPlace, arrayOf(pos))
+        placeBlocksInArea(worldIn, pointSW, pointSE, toPlace, arrayOf(pos))
+        placeBlocksInArea(worldIn, pointSE, pointNE, toPlace, arrayOf(pos))
+        placeBlocksInArea(worldIn, pointNE, pointNW, toPlace, arrayOf(pos))
     }
 
-    private fun placeBlocksInArea(world: World, startPos: BlockPos, endPos: BlockPos, toPlace: IBlockState) {
+    private fun placeBlocksInArea(world: World, startPos: BlockPos, endPos: BlockPos, toPlace: IBlockState, toSkip: Array<BlockPos>) {
         var counter: Int = 0
         for (y in pozToNegRange(startPos.y, endPos.y)) {
             for (x in pozToNegRange(startPos.x, endPos.x)) {
                 for (z in pozToNegRange(startPos.z, endPos.z)) {
-                    world.setBlockState(BlockPos(x, y, z), toPlace)
+                    val toSet = BlockPos(x, y, z)
+                    if (toSet in toSkip) {
+                        continue
+                    }
+                    world.setBlockState(toSet, toPlace)
                     counter++
                 }
             }
