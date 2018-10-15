@@ -56,7 +56,7 @@ open class CommonProxy {
 
             GameRegistry.registerTileEntity(
                     TileEntityShape::class.java,
-                    ResourceLocation(BlockTest.modId + "_shape_block")
+                    ResourceLocation(BlockTest.modId, "shape_block")
             )
 
         }
