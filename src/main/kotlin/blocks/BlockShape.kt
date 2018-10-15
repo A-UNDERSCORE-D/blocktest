@@ -8,15 +8,18 @@ import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.init.Blocks
+import net.minecraft.init.Items
 import net.minecraft.item.ItemBlock
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.EnumHand
 import net.minecraft.util.math.BlockPos
-import net.minecraft.util.text.TextComponentString
 import net.minecraft.util.text.TextComponentTranslation
 import net.minecraft.util.text.TextFormatting
 import net.minecraft.world.World
+
+fun pozToNegRange(a: Int, b: Int) = if (a < b) (a..b) else (b..a)
 
 object BlockShape : Block(Material.ROCK), ITileEntityProvider {
     init {
@@ -30,7 +33,8 @@ object BlockShape : Block(Material.ROCK), ITileEntityProvider {
             "plane" to ::placePlane,
             "checkerboard" to ::nonExistent,
             "spiral" to ::nonExistent,
-            "circle" to ::nonExistent
+            "circle" to ::nonExistent,
+            "box" to ::placeBox
     )
 
     override fun createNewTileEntity(worldIn: World, meta: Int): TileEntity? {
@@ -47,23 +51,35 @@ object BlockShape : Block(Material.ROCK), ITileEntityProvider {
         if (worldIn.isRemote) {
             return true
         }
-        playerIn.sendStatusMessage(TextComponentString(facing.toString()), false)
 
         val te = getTE(worldIn, pos)
+        if (te.maxIdx < states.size - 1) {
+            te.setmaxIdx(states.size - 1)
+        }
+
+//        playerIn.sendStatusMessage(TextComponentString(facing.toString()), false)
+
 
         val heldItem = playerIn.getHeldItem(hand)
         if (heldItem.isEmpty) {
+
             te.increment()
             val name = states.entries.elementAt(te.shapeIdx).key
             val msg = TextComponentTranslation("message.blocktest.shape_block.change_shape", name)
             msg.style.color = TextFormatting.AQUA
             playerIn.sendStatusMessage(msg, true)
-            return true
-        } else if (heldItem.item is ItemBlock) {
-            val toPlace = getBlockFromItem(heldItem.item)
+        } else if (heldItem.item is ItemBlock || heldItem.item == Items.STICK) {
+
+            lateinit var toPlaceState: IBlockState
+
+            if (heldItem.item is ItemBlock) {
+                val toPlace = getBlockFromItem(heldItem.item)
+                @Suppress("DEPRECATION")
+                toPlaceState = toPlace.getStateFromMeta(heldItem.metadata)
+            } else {
+                toPlaceState = Blocks.AIR.defaultState
+            }
             val name = states.entries.elementAt(te.shapeIdx).key
-            @Suppress("DEPRECATION")
-            val toPlaceState = toPlace.getStateFromMeta(heldItem.metadata)
             val func = states[name]!!
             func(
                     heldItem.count,
@@ -82,6 +98,7 @@ object BlockShape : Block(Material.ROCK), ITileEntityProvider {
         val startZ = pos.z - size
         val endX = pos.x + size
         val endZ = pos.z + size
+
         for (x in startX..endX) {
             for (z in startZ..endZ) {
                 val toPlacePos = BlockPos(x, pos.y, z)
@@ -105,8 +122,36 @@ object BlockShape : Block(Material.ROCK), ITileEntityProvider {
             EnumFacing.WEST -> TODO()
         }
     }
-    private fun placeArea(startX: Int, startZ: Int, endX: Int, endZ: Int, world: World, toPlace: IBlockState) {
 
+    private fun placeBox(size: Int, worldIn: World, pos: BlockPos, facing: EnumFacing, toPlace: IBlockState) {
+        val startX = pos.x - size
+        val startZ = pos.z - size
+
+        val endX = pos.x + size
+        val endZ = pos.z + size
+        // Z = +s <-> -n
+        // X = +e <-> -w
+        val pointNW = BlockPos(startX, pos.y, startZ)
+        val pointSE = BlockPos(endX, pos.y, endZ)
+        val pointNE = BlockPos(startX, pos.y, endZ)
+        val pointSW = BlockPos(endX, pos.y, startZ)
+        placeBlocksInArea(worldIn, pointNW, pointSW, toPlace)
+        placeBlocksInArea(worldIn, pointSW, pointSE, toPlace)
+        placeBlocksInArea(worldIn, pointSE, pointNE, toPlace)
+        placeBlocksInArea(worldIn, pointNE, pointNW, toPlace)
+    }
+
+    private fun placeBlocksInArea(world: World, startPos: BlockPos, endPos: BlockPos, toPlace: IBlockState) {
+        var counter: Int = 0
+        for (y in pozToNegRange(startPos.y, endPos.y)) {
+            for (x in pozToNegRange(startPos.x, endPos.x)) {
+                for (z in pozToNegRange(startPos.z, endPos.z)) {
+                    world.setBlockState(BlockPos(x, y, z), toPlace)
+                    counter++
+                }
+            }
+        }
+        println("Placed $counter blocks")
     }
 
     @Suppress("UNUSED_PARAMETER")
