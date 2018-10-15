@@ -1,0 +1,8 @@
+
+# Messages
+message.blocktest.shape_block.change_shape=Set shape block to [%s]
+# Blocks
+tile.blocktest.shape_block.name=Shape Block
+tile.blocktest.rand_block.name=Random Block
+tile.blocktest.bang_block.name=Bang Block
+tile.blocktest.rain_block.name=Rain Block

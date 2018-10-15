@@ -1,0 +1,12 @@
+[
+  {
+    "modid": "blocktest",
+    "name": "BlockTest",
+    "description": "Test Mod for adding blocks with kotlin",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "authorList": [
+      "A_D"
+    ]
+  }
+]
