@@ -1,5 +1,6 @@
 package ad.blocktest
 
+import ad.blocktest.items.ItemBlockToolTip
 import ad.blocktest.items.TestItem
 import ad.blocktest.tiles.TileEntityShape
 import net.minecraft.block.Block
@@ -15,7 +16,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry
 import org.apache.logging.log4j.Logger
 
 
-fun itemBlockWithRegistryName(block: Block): Item = ItemBlock(block).setRegistryName(block.registryName)!!
+fun itemBlockWithRegistryName(block: Block): Item = ItemBlockToolTip(block).setRegistryName(block.registryName)!!
 
 open class CommonProxy {
     lateinit var logger: Logger
