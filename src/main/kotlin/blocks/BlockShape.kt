@@ -2,6 +2,7 @@ package ad.blocktest.blocks
 
 import ad.blocktest.BlockTest
 import ad.blocktest.tiles.TileEntityShape
+import ad.blocktest.util.CubeArea
 import net.minecraft.block.Block
 import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
@@ -34,7 +35,9 @@ object BlockShape : Block(Material.ROCK), ITileEntityProvider {
             "checkerboard" to ::nonExistent,
             "spiral" to ::nonExistent,
             "circle" to ::nonExistent,
-            "box" to ::placeBox
+            "box" to ::placePerimeter,
+            "cube above" to ::placeCubeAbove,
+            "cube points above" to ::placeCubePointsAbove
     )
 
     override fun createNewTileEntity(worldIn: World, meta: Int): TileEntity? {
@@ -56,9 +59,6 @@ object BlockShape : Block(Material.ROCK), ITileEntityProvider {
         if (te.maxIdx < states.size - 1) {
             te.setmaxIdx(states.size - 1)
         }
-
-//        playerIn.sendStatusMessage(TextComponentString(facing.toString()), false)
-
 
         val heldItem = playerIn.getHeldItem(hand)
         if (heldItem.isEmpty) {
@@ -93,7 +93,6 @@ object BlockShape : Block(Material.ROCK), ITileEntityProvider {
     }
 
     private fun placePlane(size: Int, worldIn: World, pos: BlockPos, facing: EnumFacing, toPlace: IBlockState) {
-
         val startX = pos.x - size
         val startZ = pos.z - size
         val endX = pos.x + size
@@ -114,39 +113,54 @@ object BlockShape : Block(Material.ROCK), ITileEntityProvider {
         }
     }
 
-    private fun placeBox(size: Int, worldIn: World, pos: BlockPos, facing: EnumFacing, toPlace: IBlockState) {
+    private fun findCorners(size: Int, pos: BlockPos) {
         val startX = pos.x - size
         val startZ = pos.z - size
-
         val endX = pos.x + size
         val endZ = pos.z + size
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    private fun placePerimeter(size: Int, world: World, pos: BlockPos, facing: EnumFacing, toPlace: IBlockState) {
         // Z = +s <-> -n
         // X = +e <-> -w
-        val pointNW = BlockPos(startX, pos.y, startZ)
-        val pointSE = BlockPos(endX, pos.y, endZ)
-        val pointNE = BlockPos(startX, pos.y, endZ)
-        val pointSW = BlockPos(endX, pos.y, startZ)
-        placeBlocksInArea(worldIn, pointNW, pointSW, toPlace, arrayOf(pos))
-        placeBlocksInArea(worldIn, pointSW, pointSE, toPlace, arrayOf(pos))
-        placeBlocksInArea(worldIn, pointSE, pointNE, toPlace, arrayOf(pos))
-        placeBlocksInArea(worldIn, pointNE, pointNW, toPlace, arrayOf(pos))
+        val cubeArea = CubeArea(pos, size).toPlaneAt(pos.y)
+        placeBlocksInArea(world, cubeArea.pointNWB(), cubeArea.pointSWB(), toPlace)
+        placeBlocksInArea(world, cubeArea.pointSWB(), cubeArea.pointSEB(), toPlace)
+        placeBlocksInArea(world, cubeArea.pointSEB(), cubeArea.pointNEB(), toPlace)
+        placeBlocksInArea(world, cubeArea.pointNEB(), cubeArea.pointNWB(), toPlace)
+    }
+
+    private fun placeCubeAbove(size: Int, worldIn: World, pos: BlockPos, facing: EnumFacing, toPlace: IBlockState) {
+        placeBlocksInArea(worldIn, CubeArea(pos.add(0, size + 5, 0), size), toPlace)
+    }
+
+    private fun placeCubePointsAbove(size: Int, worldIn: World, pos: BlockPos, facing: EnumFacing, toPlace: IBlockState) {
+        val ca = CubeArea(pos.add(0, size + 5, 0), size)
+        for (point in ca.getPoints()) {
+            worldIn.setBlockState(point, toPlace)
+        }
+    }
+
+    private fun placeBlocksInArea(world: World, startPos: BlockPos, endPos: BlockPos, toPlace: IBlockState) {
+        return placeBlocksInArea(world, startPos, endPos, toPlace, emptyArray())
     }
 
     private fun placeBlocksInArea(world: World, startPos: BlockPos, endPos: BlockPos, toPlace: IBlockState, toSkip: Array<BlockPos>) {
-        var counter: Int = 0
-        for (y in pozToNegRange(startPos.y, endPos.y)) {
-            for (x in pozToNegRange(startPos.x, endPos.x)) {
-                for (z in pozToNegRange(startPos.z, endPos.z)) {
-                    val toSet = BlockPos(x, y, z)
-                    if (toSet in toSkip) {
-                        continue
-                    }
-                    world.setBlockState(toSet, toPlace)
-                    counter++
-                }
+        return placeBlocksInArea(world, CubeArea(startPos, endPos), toPlace, toSkip)
+    }
+
+    private fun placeBlocksInArea(world: World, cubeArea: CubeArea, toPlace: IBlockState) {
+        return placeBlocksInArea(world, cubeArea, toPlace, emptyArray())
+    }
+
+    private fun placeBlocksInArea(world: World, cubeArea: CubeArea, toPlace: IBlockState, toSkip: Array<BlockPos>) {
+        for (block in cubeArea) {
+            if (block in toSkip) {
+                continue
             }
+            world.setBlockState(block, toPlace)
         }
-        println("Placed $counter blocks")
     }
 
     @Suppress("UNUSED_PARAMETER")
