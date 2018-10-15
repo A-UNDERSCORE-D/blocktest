@@ -1,8 +1,16 @@
-
+#PARSE_ESCAPES
 # Messages
 message.blocktest.shape_block.change_shape=Set shape block to [%s]
+
 # Blocks
 tile.blocktest.shape_block.name=Shape Block
+tile.blocktest.shape_block.description=Places blocks in an area around itself. The shape can be set by right clicking with an empty hand
+
 tile.blocktest.rand_block.name=Random Block
+tile.blocktest.rand_block.description=Places itself in an area around itself randomly. Note that this WILL crash the world eventually
+
 tile.blocktest.bang_block.name=Bang Block
+tile.blocktest.bang_block.description=Explodes instantly when right clicked
+
 tile.blocktest.rain_block.name=Rain Block
+tile.blocktest.rain_block.description=Stops rainfall. triggered either by right click, or stays always on when a redstone signal is applied. Redstone behaviour can be inverted with a shift right click
