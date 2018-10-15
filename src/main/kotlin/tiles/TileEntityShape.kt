@@ -22,6 +22,14 @@ class TileEntityShape: TileEntity() {
         markDirty()
     }
 
+    fun decrement() {
+        shapeIdx--
+        if (shapeIdx < 0) {
+            shapeIdx = maxIdx
+        }
+        markDirty()
+    }
+
     override fun readFromNBT(compound: NBTTagCompound) {
         super.readFromNBT(compound)
         shapeIdx = compound.getInteger("shapeIdx")

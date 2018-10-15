@@ -62,8 +62,11 @@ object BlockShape : Block(Material.ROCK), ITileEntityProvider {
 
         val heldItem = playerIn.getHeldItem(hand)
         if (heldItem.isEmpty) {
-
-            te.increment()
+            if (playerIn.isSneaking) {
+                te.decrement()
+            } else {
+                te.increment()
+            }
             val name = states.entries.elementAt(te.shapeIdx).key
             val msg = TextComponentTranslation("message.blocktest.shape_block.change_shape", name)
             msg.style.color = TextFormatting.AQUA
