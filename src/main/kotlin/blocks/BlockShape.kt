@@ -37,7 +37,8 @@ object BlockShape : Block(Material.ROCK), ITileEntityProvider {
             "circle" to ::nonExistent,
             "box" to ::placePerimeter,
             "cube above" to ::placeCubeAbove,
-            "cube points above" to ::placeCubePointsAbove
+            "cube points above" to ::placeCubePointsAbove,
+            "cube wireframe above" to ::placeCubeWireframeAbove
     )
 
     override fun createNewTileEntity(worldIn: World, meta: Int): TileEntity? {
@@ -62,15 +63,18 @@ object BlockShape : Block(Material.ROCK), ITileEntityProvider {
 
         val heldItem = playerIn.getHeldItem(hand)
         if (heldItem.isEmpty) {
+
             if (playerIn.isSneaking) {
                 te.decrement()
             } else {
                 te.increment()
             }
+
             val name = states.entries.elementAt(te.shapeIdx).key
             val msg = TextComponentTranslation("message.blocktest.shape_block.change_shape", name)
             msg.style.color = TextFormatting.AQUA
             playerIn.sendStatusMessage(msg, true)
+
         } else if (heldItem.item is ItemBlock || heldItem.item == Items.STICK) {
 
             lateinit var toPlaceState: IBlockState
@@ -92,6 +96,7 @@ object BlockShape : Block(Material.ROCK), ITileEntityProvider {
                     toPlaceState
             )
         }
+
         return true
     }
 
@@ -116,13 +121,6 @@ object BlockShape : Block(Material.ROCK), ITileEntityProvider {
         }
     }
 
-    private fun findCorners(size: Int, pos: BlockPos) {
-        val startX = pos.x - size
-        val startZ = pos.z - size
-        val endX = pos.x + size
-        val endZ = pos.z + size
-    }
-
     @Suppress("UNUSED_PARAMETER")
     private fun placePerimeter(size: Int, world: World, pos: BlockPos, facing: EnumFacing, toPlace: IBlockState) {
         // Z = +s <-> -n
@@ -133,7 +131,6 @@ object BlockShape : Block(Material.ROCK), ITileEntityProvider {
         placeBlocksInArea(world, cubeArea.pointSEB(), cubeArea.pointNEB(), toPlace)
         placeBlocksInArea(world, cubeArea.pointNEB(), cubeArea.pointNWB(), toPlace)
     }
-
     private fun placeCubeAbove(size: Int, worldIn: World, pos: BlockPos, facing: EnumFacing, toPlace: IBlockState) {
         placeBlocksInArea(worldIn, CubeArea(pos.add(0, size + 5, 0), size), toPlace)
     }
@@ -144,6 +141,19 @@ object BlockShape : Block(Material.ROCK), ITileEntityProvider {
             worldIn.setBlockState(point, toPlace)
         }
     }
+
+    private fun placeCubeWireframeAbove(size: Int, world: World, pos: BlockPos, facing: EnumFacing, toPlace: IBlockState) {
+        val ca = CubeArea(pos.add(0, size + 5, 0), size)
+        for (line in ca.getEdges()) {
+            placeBlocksInArea(world, line, toPlace)
+        }
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    private fun nonExistent(size: Int, worldIn: World, pos: BlockPos, facing: EnumFacing, toPlace: IBlockState) {
+    }
+
+    // **** Place blocks funcs
 
     private fun placeBlocksInArea(world: World, startPos: BlockPos, endPos: BlockPos, toPlace: IBlockState) {
         return placeBlocksInArea(world, startPos, endPos, toPlace, emptyArray())
@@ -164,9 +174,5 @@ object BlockShape : Block(Material.ROCK), ITileEntityProvider {
             }
             world.setBlockState(block, toPlace)
         }
-    }
-
-    @Suppress("UNUSED_PARAMETER")
-    private fun nonExistent(size: Int, worldIn: World, pos: BlockPos, facing: EnumFacing, toPlace: IBlockState) {
     }
 }
