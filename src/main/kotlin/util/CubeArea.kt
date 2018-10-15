@@ -47,6 +47,26 @@ class CubeArea(sX: Int, sY: Int, sZ: Int, eX: Int, eY: Int, eZ: Int) : Iterable<
                 pointSET()
         )
     }
+    
+    fun getEdges(): Array<CubeArea> {
+        return arrayOf(
+                CubeArea(pointNWB(), pointNEB()),
+                CubeArea(pointSWB(), pointSEB()),
+                CubeArea(pointSWB(), pointNWB()),
+                CubeArea(pointSEB(), pointNEB()),
+                
+                CubeArea(pointNWT(), pointNET()),
+                CubeArea(pointSWT(), pointSET()),
+                CubeArea(pointSWT(), pointNWT()),
+                CubeArea(pointSET(), pointNET()),
+
+                CubeArea(pointNWB(), pointNWT()),
+                CubeArea(pointNEB(), pointNET()),
+                CubeArea(pointSWB(), pointSWT()),
+                CubeArea(pointSEB(), pointSET())
+                
+        )
+    }
 
 
 
