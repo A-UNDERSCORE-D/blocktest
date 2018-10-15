@@ -35,7 +35,7 @@ object BlockShape : Block(Material.ROCK), ITileEntityProvider {
 
     override fun createNewTileEntity(worldIn: World, meta: Int): TileEntity? {
         val te = TileEntityShape()
-        te.setmaxIdx(states.size)
+        te.setmaxIdx(states.size - 1)
         return te
     }
 
