@@ -38,7 +38,8 @@ class BlockStopRain : Block(Material.ROCK) {
         return defaultState.withProperty(redstoneInverted, meta == 1)
     }
 
-    override fun onBlockActivated(worldIn: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer, hand: EnumHand, facing: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean {
+    override fun onBlockActivated(worldIn: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer,
+                                  hand: EnumHand, facing: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean {
         if (worldIn.isRemote) {
             return true
         }
@@ -56,7 +57,8 @@ class BlockStopRain : Block(Material.ROCK) {
         return BlockStateContainer(this, redstoneInverted)
     }
 
-    override fun getStateForPlacement(world: World, pos: BlockPos, facing: EnumFacing, hitX: Float, hitY: Float, hitZ: Float, meta: Int, placer: EntityLivingBase, hand: EnumHand): IBlockState {
+    override fun getStateForPlacement(world: World, pos: BlockPos, facing: EnumFacing, hitX: Float, hitY: Float,
+                                      hitZ: Float, meta: Int, placer: EntityLivingBase, hand: EnumHand): IBlockState {
         world.scheduleUpdate(pos, this, 10) // Thanks DE for this cool idea
         return super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand)
     }
