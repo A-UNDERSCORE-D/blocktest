@@ -1,0 +1,29 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "minecraft:cube_all",
+    "transform": "forge:default-block",
+    "textures": {
+      "all": "blocks/wool_colored_white",
+      "up": "blocks/concrete_powder_black"
+    }
+  },
+  "variants": {
+    "active=true": [
+      {
+        "textures": {
+          "up": "minecraft:blocks/concrete_powder_red"
+        }
+      }
+    ],
+    "active=false": [
+      {}
+    ],
+    "normal": [
+      {}
+    ],
+    "inventory": [
+      {}
+    ]
+  }
+}
