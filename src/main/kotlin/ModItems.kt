@@ -1,5 +1,8 @@
 package ad.blocktest
 
-object ModItems {
+import ad.blocktest.items.TestItem
 
+object ModItems {
+    val itemTest = TestItem
+    val ITEMS = arrayOf(itemTest)
 }

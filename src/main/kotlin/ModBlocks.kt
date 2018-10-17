@@ -1,6 +1,5 @@
 package ad.blocktest
 
-import ad.blocktest.blocks.BlockBang
 import ad.blocktest.blocks.BlockRandPlace
 import net.minecraft.block.Block
 import net.minecraftforge.fml.common.registry.GameRegistry
@@ -20,4 +19,12 @@ object ModBlocks {
 
     @GameRegistry.ObjectHolder("blocktest:rain_block")
     val blockStopRain: ad.blocktest.blocks.BlockStopRain = ad.blocktest.blocks.BlockStopRain()
+
+    val BLOCKS = arrayOf(
+            blockTest,
+            blockRandPlace,
+            blockBang,
+            blockShape,
+            blockStopRain
+    )
 }

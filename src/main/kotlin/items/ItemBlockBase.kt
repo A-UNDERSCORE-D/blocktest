@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.util.text.TextComponentTranslation
 import net.minecraft.world.World
 
-class ItemBlockToolTip(block: Block): ItemBlock(block) {
+class ItemBlockBase(block: Block) : ItemBlock(block) {
     override fun addInformation(stack: ItemStack, worldIn: World?, tooltip: MutableList<String>, flagIn: ITooltipFlag) {
         super.addInformation(stack, worldIn, tooltip, flagIn)
         val desc: String = TextComponentTranslation(this.block.unlocalizedName + ".description").formattedText
