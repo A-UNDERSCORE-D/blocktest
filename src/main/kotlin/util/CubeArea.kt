@@ -50,17 +50,17 @@ class CubeArea(sX: Int, sY: Int, sZ: Int, eX: Int, eY: Int, eZ: Int) : Iterable<
     
     fun getEdges(): Array<CubeArea> {
         return arrayOf(
-                CubeArea(pointNWB(), pointNEB()),
+                CubeArea(pointNWB(), pointNEB()),   // Lower rectangle
                 CubeArea(pointSWB(), pointSEB()),
                 CubeArea(pointSWB(), pointNWB()),
                 CubeArea(pointSEB(), pointNEB()),
                 
-                CubeArea(pointNWT(), pointNET()),
+                CubeArea(pointNWT(), pointNET()),   // Upper rectangle
                 CubeArea(pointSWT(), pointSET()),
                 CubeArea(pointSWT(), pointNWT()),
                 CubeArea(pointSET(), pointNET()),
 
-                CubeArea(pointNWB(), pointNWT()),
+                CubeArea(pointNWB(), pointNWT()),   // Connecting pillars
                 CubeArea(pointNEB(), pointNET()),
                 CubeArea(pointSWB(), pointSWT()),
                 CubeArea(pointSEB(), pointSET())
