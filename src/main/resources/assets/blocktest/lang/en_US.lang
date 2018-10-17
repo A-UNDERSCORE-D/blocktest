@@ -14,3 +14,6 @@ tile.blocktest.bang_block.description=Explodes instantly when right clicked
 
 tile.blocktest.rain_block.name=Rain Block
 tile.blocktest.rain_block.description=Stops rainfall. triggered either by right click, or stays always on when a redstone signal is applied. Redstone behaviour can be inverted with a shift right click
+
+# items
+item.blocktest.test_item.name=Test Item, Please Ignore
