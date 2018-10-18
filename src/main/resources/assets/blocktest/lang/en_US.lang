@@ -17,3 +17,13 @@ tile.blocktest.rain_block.description=Stops rainfall. triggered either by right 
 
 # items
 item.blocktest.test_item.name=Test Item, Please Ignore
+
+# Shapes
+
+shape.blocktest.concentric_rectangles.name=Concentric Rectanges
+shape.blocktest.cube_above.name=Cube Above
+shape.blocktest.cube_points_above.name=Cube Points Above
+shape.blocktest.cube_wireframe_above.name=Cube Wireframe Above
+shape.blocktest.diagonal.name=Diagonal Lines
+shape.blocktest.perimeter.name=Perimeter
+shape.blocktest.plane.name=Plane

@@ -3,7 +3,7 @@ package ad.blocktest.tiles
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 
-class TileEntityShape: TileEntity() {
+class TileEntityShape : TileEntity() {
     var shapeIdx = 0
         private set
 
@@ -12,8 +12,12 @@ class TileEntityShape: TileEntity() {
 
     fun setmaxIdx(value: Int) {
         maxIdx = value
+        if (shapeIdx > maxIdx) {
+            shapeIdx = maxIdx
+        }
         markDirty()
     }
+
     fun increment() {
         shapeIdx++
         if (shapeIdx > maxIdx) {
