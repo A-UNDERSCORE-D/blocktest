@@ -22,8 +22,4 @@ class TestBlock : BlockBase(Material.ROCK) {
         return Item.getItemFromBlock(this)
     }
 
-    override fun onBlockClicked(worldIn: World, pos: BlockPos, playerIn: EntityPlayer) {
-        super.onBlockClicked(worldIn, pos, playerIn)
-    }
-
 }
