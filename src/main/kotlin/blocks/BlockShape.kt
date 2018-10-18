@@ -3,7 +3,6 @@ package ad.blocktest.blocks
 import ad.blocktest.BlockTest
 import ad.blocktest.blocks.shapes.*
 import ad.blocktest.tiles.TileEntityShape
-import net.minecraft.block.ITileEntityProvider
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.creativetab.CreativeTabs
@@ -19,9 +18,7 @@ import net.minecraft.util.text.TextComponentTranslation
 import net.minecraft.util.text.TextFormatting
 import net.minecraft.world.World
 
-fun pozToNegRange(a: Int, b: Int) = if (a < b) (a..b) else (b..a)
-
-object BlockShape : BlockBase(Material.ROCK), ITileEntityProvider {
+object BlockShape : BlockBase(Material.ROCK) {
     private val shapes: MutableList<IBlockShapeShape> = mutableListOf()
 
     init {
@@ -38,24 +35,22 @@ object BlockShape : BlockBase(Material.ROCK), ITileEntityProvider {
         registerShape(ShapePlane)
     }
 
-//    private val shapes: Map<String, (Int, World, BlockPos, EnumFacing, IBlockState) -> Unit> = mapOf(
-//            "wall" to ::nonExistent,
-//            "plane" to ::placePlane,
-//            "checkerboard" to ::nonExistent,
-//            "spiral" to ::nonExistent,
-//            "circle" to ::nonExistent,
-//            "perimeter" to ::placePerimeter,
-//            "conc perimeter" to ::placeConcentricRectangles,
-//            "diagonal" to ::placeDiagonal,
-//            "cube above" to ::placeCubeAbove,
-//            "cube points above" to ::placeCubePointsAbove,
-//            "cube wireframe above" to ::placeCubeWireframeAbove
-//    )
+    override fun hasTileEntity(state: IBlockState): Boolean {
+        return if (state.block != this) {
+            super.hasTileEntity(state)
+        } else {
+            true
+        }
+    }
 
-    override fun createNewTileEntity(worldIn: World, meta: Int): TileEntity? {
-        val te = TileEntityShape()
-        te.setmaxIdx(shapes.size - 1)
-        return te
+    override fun createTileEntity(world: World, state: IBlockState): TileEntity? {
+        return if (state.block != this) {
+            super.createTileEntity(world, state)
+        } else {
+            val te = TileEntityShape()
+            te.setmaxIdx(shapes.size - 1)
+            te
+        }
     }
 
     fun registerShape(shape: IBlockShapeShape) {
