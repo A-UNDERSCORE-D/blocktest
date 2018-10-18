@@ -36,36 +36,55 @@ class CubeArea(sX: Int, sY: Int, sZ: Int, eX: Int, eY: Int, eZ: Int) : Iterable<
     fun pointSET() = BlockPos(x.first, y.first, z.first)
 
     fun getPoints(): Array<BlockPos> {
-        return arrayOf(
-                pointNWB(),
-                pointNWT(),
-                pointNEB(),
-                pointNET(),
-                pointSWB(),
-                pointSWT(),
-                pointSEB(),
-                pointSET()
-        )
+        if (!isYPlane()) {
+            return arrayOf(
+                    pointNWB(),
+                    pointNWT(),
+                    pointNEB(),
+                    pointNET(),
+                    pointSWB(),
+                    pointSWT(),
+                    pointSEB(),
+                    pointSET()
+            )
+        } else {
+            return arrayOf(
+                    pointNWB(),
+                    pointNEB(),
+                    pointSEB(),
+                    pointSWB()
+            )
+        }
     }
     
     fun getEdges(): Array<CubeArea> {
-        return arrayOf(
-                CubeArea(pointNWB(), pointNEB()),   // Lower rectangle
-                CubeArea(pointSWB(), pointSEB()),
-                CubeArea(pointSWB(), pointNWB()),
-                CubeArea(pointSEB(), pointNEB()),
-                
-                CubeArea(pointNWT(), pointNET()),   // Upper rectangle
-                CubeArea(pointSWT(), pointSET()),
-                CubeArea(pointSWT(), pointNWT()),
-                CubeArea(pointSET(), pointNET()),
+        if (!isYPlane()) {
+            return arrayOf(
+                    CubeArea(pointNWB(), pointNEB()),   // Lower rectangle
+                    CubeArea(pointSWB(), pointSEB()),
+                    CubeArea(pointSWB(), pointNWB()),
+                    CubeArea(pointSEB(), pointNEB()),
 
-                CubeArea(pointNWB(), pointNWT()),   // Connecting pillars
-                CubeArea(pointNEB(), pointNET()),
-                CubeArea(pointSWB(), pointSWT()),
-                CubeArea(pointSEB(), pointSET())
-                
-        )
+                    CubeArea(pointNWT(), pointNET()),   // Upper rectangle
+                    CubeArea(pointSWT(), pointSET()),
+                    CubeArea(pointSWT(), pointNWT()),
+                    CubeArea(pointSET(), pointNET()),
+
+                    CubeArea(pointNWB(), pointNWT()),   // Connecting pillars
+                    CubeArea(pointNEB(), pointNET()),
+                    CubeArea(pointSWB(), pointSWT()),
+                    CubeArea(pointSEB(), pointSET())
+
+            )
+        }
+        else {
+            return arrayOf(
+                    CubeArea(pointNWB(), pointNEB()),   // Lower rectangle
+                    CubeArea(pointSWB(), pointSEB()),
+                    CubeArea(pointSWB(), pointNWB()),
+                    CubeArea(pointSEB(), pointNEB())
+            )
+        }
     }
 
 
