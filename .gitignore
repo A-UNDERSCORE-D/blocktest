@@ -3,6 +3,7 @@
 build
 gradle-app.setting
 run
+runServer
 
 # GMCP plugin
 /minecraft
