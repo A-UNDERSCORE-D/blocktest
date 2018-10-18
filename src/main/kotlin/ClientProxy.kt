@@ -1,7 +1,6 @@
 package ad.blocktest
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
-import net.minecraft.item.Item
 import net.minecraftforge.client.model.ModelLoader
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
@@ -21,11 +20,7 @@ class ClientProxy : CommonProxy() {
         super.registerModels()
         BlockTest.logger.info("Started registering models")
         for (block in ModBlocks.BLOCKS) {
-            ModelLoader.setCustomModelResourceLocation(
-                    Item.getItemFromBlock(block),
-                    0,
-                    ModelResourceLocation(block.registryName!!, "inventory")
-            )
+            block.registerItemModel()
         }
         BlockTest.logger.info("Registered block item models")
 
