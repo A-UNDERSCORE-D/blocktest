@@ -1,7 +1,6 @@
 package ad.blocktest.blocks
 
 import ad.blocktest.BlockTest
-import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.creativetab.CreativeTabs
@@ -9,9 +8,9 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.Item
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
-import java.util.Random
+import java.util.*
 
-class TestBlock: Block(Material.ROCK) {
+class TestBlock : BlockBase(Material.ROCK) {
     init {
         unlocalizedName = BlockTest.modId + ".test_block"
         setCreativeTab(CreativeTabs.BUILDING_BLOCKS)

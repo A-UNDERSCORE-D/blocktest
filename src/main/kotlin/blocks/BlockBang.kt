@@ -1,7 +1,6 @@
 package ad.blocktest.blocks
 
 import ad.blocktest.BlockTest
-import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.creativetab.CreativeTabs
@@ -11,15 +10,16 @@ import net.minecraft.util.EnumHand
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.Explosion
 import net.minecraft.world.World
-import java.util.Random
+import java.util.*
 
 
 fun createExplosionAtLocation(worldIn: World, x: Double, y: Double, z: Double, strength: Float = 6F) {
     worldIn.createExplosion(null, x, y, z, strength, true)
 }
-fun IntRange.random() = Random().nextInt((endInclusive + 1) - start) +  start
 
-object BlockBang : Block(Material.ROCK) {
+fun IntRange.random() = Random().nextInt((endInclusive + 1) - start) + start
+
+object BlockBang : BlockBase(Material.ROCK) {
     init {
         setCreativeTab(CreativeTabs.BUILDING_BLOCKS)
         unlocalizedName = BlockTest.modId + ".bang_block"

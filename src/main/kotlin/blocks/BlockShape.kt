@@ -22,7 +22,7 @@ import net.minecraft.world.World
 
 fun pozToNegRange(a: Int, b: Int) = if (a < b) (a..b) else (b..a)
 
-object BlockShape : Block(Material.ROCK), ITileEntityProvider {
+object BlockShape : BlockBase(Material.ROCK), ITileEntityProvider {
     init {
         setRegistryName("shape_block")
         setCreativeTab(CreativeTabs.BUILDING_BLOCKS)

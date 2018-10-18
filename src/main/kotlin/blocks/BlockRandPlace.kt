@@ -1,7 +1,6 @@
 package ad.blocktest.blocks
 
 import ad.blocktest.BlockTest
-import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.creativetab.CreativeTabs
@@ -10,9 +9,9 @@ import net.minecraft.util.EnumFacing
 import net.minecraft.util.EnumHand
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
-import java.util.Random
+import java.util.*
 
-object BlockRandPlace : Block(Material.ROCK) {
+object BlockRandPlace : BlockBase(Material.ROCK) {
     init {
         unlocalizedName = BlockTest.modId + ".rand_block"
         setCreativeTab(CreativeTabs.BUILDING_BLOCKS)

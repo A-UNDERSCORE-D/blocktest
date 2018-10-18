@@ -1,7 +1,6 @@
 package ad.blocktest.blocks
 
 import ad.blocktest.BlockTest
-import net.minecraft.block.Block
 import net.minecraft.block.SoundType
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.PropertyBool
@@ -16,7 +15,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import java.util.*
 
-class BlockStopRain : Block(Material.ROCK) {
+class BlockStopRain : BlockBase(Material.ROCK) {
 
     companion object {
         val redstoneInverted: PropertyBool = PropertyBool.create("active")
@@ -68,11 +67,14 @@ class BlockStopRain : Block(Material.ROCK) {
         worldIn.scheduleUpdate(pos, this, 20)
         val isPowered = worldIn.isBlockPowered(pos)
         val redstoneIsInverted = worldIn.getBlockState(pos).getValue(redstoneInverted)
+        val isRainOrThunder = worldIn.isRaining || worldIn.isThundering
 
-        if (redstoneIsInverted && !isPowered) {
+        if ((redstoneIsInverted && !isPowered) && isRainOrThunder) {
             disableRain(worldIn)
-        } else if (!redstoneIsInverted && isPowered) {
+            BlockTest.logger.info("Rain stopped by rain block ($state) at $pos")
+        } else if ((!redstoneIsInverted && isPowered) && isRainOrThunder) {
             disableRain(worldIn)
+            BlockTest.logger.info("Rain stopped by rain block ($state) at $pos")
         }
     }
 
