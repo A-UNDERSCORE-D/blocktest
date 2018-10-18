@@ -1,6 +1,7 @@
 package ad.blocktest.blocks
 
 import ad.blocktest.BlockTest
+import ad.blocktest.util.random
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.creativetab.CreativeTabs
@@ -17,7 +18,6 @@ fun createExplosionAtLocation(worldIn: World, x: Double, y: Double, z: Double, s
     worldIn.createExplosion(null, x, y, z, strength, true)
 }
 
-fun IntRange.random() = Random().nextInt((endInclusive + 1) - start) + start
 
 object BlockBang : BlockBase(Material.ROCK) {
     init {
@@ -47,10 +47,15 @@ object BlockBang : BlockBase(Material.ROCK) {
                 createExplosionAtLocation(worldIn, x + ΔX + ((0..50).random() / 10), y + 3 + ((0..50).random() / 10), z + ΔZ + ((0..50).random() / 10))
             }
         }
+        worldIn.setBlockToAir(pos)
     }
 
     override fun onBlockExploded(world: World, pos: BlockPos, explosion: Explosion) {
-        super.onBlockExploded(world, pos, explosion)
+        world.scheduleUpdate(pos, this, (2..10).random())
+    }
+
+    override fun updateTick(world: World, pos: BlockPos, state: IBlockState, rand: Random) {
+        super.updateTick(world, pos, state, rand)
         doExplosion(world, pos)
     }
 }
