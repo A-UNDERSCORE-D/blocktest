@@ -18,9 +18,8 @@ import net.minecraft.util.text.TextComponentTranslation
 import net.minecraft.util.text.TextFormatting
 import net.minecraft.world.World
 
-object BlockShape : BlockBase(Material.ROCK) {
+object BlockShape: BlockBase(Material.ROCK) {
     private val shapes: MutableList<IBlockShapeShape> = mutableListOf()
-
     init {
         setRegistryName("shape_block")
         setCreativeTab(CreativeTabs.BUILDING_BLOCKS)
@@ -48,7 +47,7 @@ object BlockShape : BlockBase(Material.ROCK) {
             super.createTileEntity(world, state)
         } else {
             val te = TileEntityShape()
-            te.setmaxIdx(shapes.size - 1)
+            te.maxIdx = shapes.size - 1
             te
         }
     }
@@ -68,7 +67,7 @@ object BlockShape : BlockBase(Material.ROCK) {
         }
         val te = getTE(worldIn, pos)
         if (te.maxIdx != shapes.size - 1) {
-            te.setmaxIdx(shapes.size - 1)
+            te.maxIdx = shapes.size - 1
         }
 
         val heldItem = playerIn.getHeldItem(hand)

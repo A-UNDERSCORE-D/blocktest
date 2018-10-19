@@ -7,10 +7,10 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import org.apache.logging.log4j.Logger
 
 @Suppress("MemberVisibilityCanBePrivate")
-@Mod(modid = BlockTest.modId, version = BlockTest.modVersion, name = BlockTest.modName, modLanguageAdapter = "net.shadowfacts.forgelin.KotlinAdapter")
+@Mod(modid = BlockTest.modId, version = BlockTest.modVersion, name = BlockTest.modName, modLanguageAdapter = "net.shadowfacts.forgelin.KotlinAdapter", useMetadata = true)
 object BlockTest {
     const val modId = "blocktest"
-    const val modVersion = "1.0-SNAPSHOT"
+    const val modVersion = "@VERSION@"
     const val modName = "Test Mod for adding blocks with kotlin"
 
     @SidedProxy(clientSide = "ad.blocktest.ClientProxy", serverSide = "ad.blocktest.ServerProxy")

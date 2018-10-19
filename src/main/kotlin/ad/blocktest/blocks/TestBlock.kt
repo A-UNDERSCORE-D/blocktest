@@ -4,10 +4,7 @@ import ad.blocktest.BlockTest
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.Item
-import net.minecraft.util.math.BlockPos
-import net.minecraft.world.World
 import java.util.*
 
 class TestBlock : BlockBase(Material.ROCK) {

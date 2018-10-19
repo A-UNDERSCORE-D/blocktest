@@ -8,10 +8,8 @@ class TileEntityShape : TileEntity() {
         private set
 
     var maxIdx: Int = -1
-        private set
-
-    fun setmaxIdx(value: Int) {
-        maxIdx = value
+        set(value) {
+        field = value
         if (shapeIdx > maxIdx) {
             shapeIdx = maxIdx
         }
